@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Project name="practical" author="" >
+<instances name="food">
+  <instance id="banana" >
+    <att name="color" value="Yellow" />
+    <att name="name" value="banana" />
+    <att name="size" value="medium" />
+    <att name="cost" value="15.0" />
+    <att name="taste" value="sweet;" />
+  </instance>
+  <instance id="garlic" >
+    <att name="color" value="white" />
+    <att name="name" value="garlic" />
+    <att name="size" value="small" />
+    <att name="cost" value="16.0" />
+    <att name="taste" value="umami;" />
+  </instance>
+  <instance id="kidney beans" >
+    <att name="color" value="Red" />
+    <att name="name" value="kidney beans" />
+    <att name="size" value="medium" />
+    <att name="cost" value="33.0" />
+    <att name="taste" value="salt;" />
+  </instance>
+  <instance id="pineapple" >
+    <att name="color" value="Yellow" />
+    <att name="name" value="pineapple" />
+    <att name="size" value="large" />
+    <att name="cost" value="38.0" />
+    <att name="taste" value="sweet;" />
+  </instance>
+  <instance id="onion" >
+    <att name="color" value="Brown" />
+    <att name="name" value="onion" />
+    <att name="size" value="medium" />
+    <att name="cost" value="14.0" />
+    <att name="taste" value="umami;" />
+  </instance>
+  <instance id="corn" >
+    <att name="color" value="Yellow" />
+    <att name="name" value="corn" />
+    <att name="size" value="small" />
+    <att name="cost" value="18.0" />
+    <att name="taste" value="sweet;" />
+  </instance>
+  <instance id="tomato" >
+    <att name="color" value="Red" />
+    <att name="name" value="tomato" />
+    <att name="size" value="medium" />
+    <att name="cost" value="21.0" />
+    <att name="taste" value="umami;sweet;sour;" />
+  </instance>
+  <instance id="pea" >
+    <att name="color" value="Green" />
+    <att name="name" value="pea" />
+    <att name="size" value="small" />
+    <att name="cost" value="19.0" />
+    <att name="taste" value="sweet;" />
+  </instance>
+  <instance id="hamburger" >
+    <att name="color" value="Brown" />
+    <att name="name" value="hamburger" />
+    <att name="size" value="medium" />
+    <att name="cost" value="49.0" />
+    <att name="taste" value="salt;umami;" />
+  </instance>
+  <instance id="haba&#241;ero" >
+    <att name="color" value="Red" />
+    <att name="name" value="haba&#241;ero" />
+    <att name="size" value="small" />
+    <att name="cost" value="25.0" />
+    <att name="taste" value="umami;sour;" />
+  </instance>
+</instances>
+<cb name="base">
+     <case name="banana" />
+     <case name="garlic" />
+     <case name="kidney beans" />
+     <case name="pineapple" />
+     <case name="corn" />
+     <case name="onion" />
+     <case name="tomato" />
+     <case name="pea" />
+     <case name="haba&#241;ero" />
+     <case name="hamburger" />
+</cb>
+</Project>

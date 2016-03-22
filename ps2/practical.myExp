@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Project name="practical" author="" >
+<exp obj="food" type="Concept" >
+  <desc>
+      </desc>
+</exp>
+<exp obj="color" c="food" type="AttributeDesc" >
+  <desc>
+  </desc>
+</exp>
+<exp obj="name" c="food" type="AttributeDesc" >
+  <desc>
+      </desc>
+</exp>
+<exp obj="size" c="food" type="AttributeDesc" >
+  <desc>
+      </desc>
+</exp>
+<exp obj="cost" c="food" type="AttributeDesc" >
+  <desc>
+      </desc>
+</exp>
+<exp obj="taste" c="food" type="AttributeDesc" >
+  <desc>
+&#10;    </desc>
+</exp>
+<exp obj="color" c="food" type="AttributeDesc" >
+  <desc>
+      </desc>
+</exp>
+<exp obj="garlic" c="food" type="Instance" >
+  <desc>
+  </desc>
+</exp>
+<exp obj="tomato" c="food" type="Instance" >
+  <desc>
+  </desc>
+</exp>
+<exp obj="onion" c="food" type="Instance" >
+  <desc>
+  </desc>
+</exp>
+<exp obj="pea" c="food" type="Instance" >
+  <desc>
+  </desc>
+</exp>
+<exp obj="banana" c="food" type="Instance" >
+  <desc>
+  </desc>
+</exp>
+<exp obj="kidney beans" c="food" type="Instance" >
+  <desc>
+  </desc>
+</exp>
+<exp obj="corn" c="food" type="Instance" >
+  <desc>
+  </desc>
+</exp>
+<exp obj="pineapple" c="food" type="Instance" >
+  <desc>
+  </desc>
+</exp>
+<exp obj="haba&#241;ero" c="food" type="Instance" >
+  <desc>
+  </desc>
+</exp>
+<exp obj="hamburger" c="food" type="Instance" >
+  <desc>
+  </desc>
+</exp>
+</Project>

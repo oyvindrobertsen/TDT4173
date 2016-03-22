@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Project name="practical" author="" >
+<svs>
+  <sv name="_unknown_"/>
+  <sv name="_undefined_"/>
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="_unknown_">
+</qsym>
+<qsym name="_undefined_">
+</qsym>
+</fct>
+</svs>
+<model>
+  <concept name="food">
+    <desc name="cost" type="Float" min="0.0" max="50.0" mult="false" >
+      <fct name="default function" type="Float" ltype="CONSTANT" lparam="1.0" rtype="CONSTANT" rparam="1.0" mode="DIFFERENCE" symm="true" mt="PARTNER_QUERY" r="REUSE" t="MAX" maxForQuotient="10.0" />
+      <fct name="exact" type="Float" ltype="POLYNOMIAL_WITH" lparam="1.0" rtype="POLYNOMIAL_WITH" rparam="1.0" mode="DIFFERENCE" symm="true" mt="PARTNER_QUERY" r="REUSE" t="MAX" maxForQuotient="10.0" />
+    </desc>
+    <desc name="size" type="Symbol" mult="false" >
+      <symbol value="small" />
+      <symbol value="large" />
+      <symbol value="medium" />
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="small">
+<csym name="medium" sim="0.5"/>
+</qsym>
+<qsym name="large">
+<csym name="medium" sim="0.5"/>
+</qsym>
+<qsym name="medium">
+<csym name="small" sim="0.5"/>
+<csym name="large" sim="0.5"/>
+</qsym>
+</fct>
+    </desc>
+    <desc name="color" type="Symbol" mult="false" >
+      <symbol value="Red" />
+      <symbol value="Brown" />
+      <symbol value="pink" />
+      <symbol value="white" />
+      <symbol value="Yellow" />
+      <symbol value="Blue" />
+      <symbol value="black" />
+      <symbol value="purple" />
+      <symbol value="Orange" />
+      <symbol value="Green" />
+<fct name="default function" type="Symbol" mt="PARTNER_QUERY" r="REUSE" t="MAX" symm="true">
+<qsym name="Red">
+<csym name="Brown" sim="0.8"/>
+<csym name="pink" sim="0.5"/>
+<csym name="white" sim="0.5"/>
+<csym name="Yellow" sim="0.3"/>
+<csym name="purple" sim="0.8"/>
+<csym name="Orange" sim="0.3"/>
+<csym name="Green" sim="0.2"/>
+</qsym>
+<qsym name="Brown">
+<csym name="Red" sim="0.8"/>
+<csym name="Yellow" sim="0.2"/>
+<csym name="Blue" sim="0.3"/>
+<csym name="black" sim="0.8"/>
+<csym name="purple" sim="0.1"/>
+<csym name="Orange" sim="0.4"/>
+<csym name="Green" sim="0.5"/>
+</qsym>
+<qsym name="pink">
+<csym name="Red" sim="0.5"/>
+<csym name="Brown" sim="0.6"/>
+<csym name="white" sim="0.2"/>
+<csym name="Yellow" sim="0.2"/>
+<csym name="Blue" sim="0.6"/>
+</qsym>
+<qsym name="white">
+<csym name="Red" sim="0.3"/>
+<csym name="pink" sim="0.2"/>
+<csym name="Yellow" sim="0.8"/>
+<csym name="Blue" sim="0.2"/>
+<csym name="purple" sim="0.05"/>
+</qsym>
+<qsym name="Yellow">
+<csym name="Red" sim="0.5"/>
+<csym name="Brown" sim="0.2"/>
+<csym name="white" sim="0.2"/>
+<csym name="black" sim="0.2"/>
+<csym name="purple" sim="0.6"/>
+<csym name="Orange" sim="0.7"/>
+<csym name="Green" sim="0.6"/>
+</qsym>
+<qsym name="Blue">
+<csym name="Brown" sim="0.3"/>
+<csym name="pink" sim="0.6"/>
+<csym name="black" sim="0.3"/>
+<csym name="purple" sim="0.6"/>
+<csym name="Green" sim="0.7"/>
+</qsym>
+<qsym name="black">
+<csym name="Red" sim="0.8"/>
+<csym name="Brown" sim="0.8"/>
+<csym name="white" sim="0.05"/>
+<csym name="Yellow" sim="0.6"/>
+<csym name="Blue" sim="0.3"/>
+<csym name="Green" sim="0.1"/>
+</qsym>
+<qsym name="purple">
+<csym name="Red" sim="0.3"/>
+<csym name="Brown" sim="0.1"/>
+<csym name="Yellow" sim="0.7"/>
+<csym name="Blue" sim="0.6"/>
+</qsym>
+<qsym name="Orange">
+<csym name="Red" sim="0.3"/>
+<csym name="Brown" sim="0.4"/>
+<csym name="Yellow" sim="0.9"/>
+<csym name="Green" sim="0.2"/>
+</qsym>
+<qsym name="Green">
+<csym name="Red" sim="0.2"/>
+<csym name="Brown" sim="0.5"/>
+<csym name="Yellow" sim="0.6"/>
+<csym name="Blue" sim="0.7"/>
+<csym name="black" sim="0.1"/>
+<csym name="Orange" sim="0.2"/>
+</qsym>
+</fct>
+    </desc>
+    <desc name="taste" type="Symbol" mult="true" >
+      <symbol value="salt" />
+      <symbol value="sweet" />
+      <symbol value="sour" />
+      <symbol value="bitter" />
+      <symbol value="umami" />
+<fct name="default function" type="Symbol" mt="BEST_MATCH" r="NONE" t="NONE" symm="true">
+<qsym name="salt">
+</qsym>
+<qsym name="sweet">
+</qsym>
+<qsym name="sour">
+</qsym>
+<qsym name="bitter">
+</qsym>
+<qsym name="umami">
+</qsym>
+</fct>
+    </desc>
+    <desc name="name" type="String" mult="false" >
+      <fct name="default function" type="String" symm="true" config="EQUALITY" n="3" mt="PARTNER_QUERY" r="REUSE" t="MAX" />
+    </desc>
+    <amalgam name="global - nameless" type="WEIGHTED_SUM" active="false" >
+      <entry name="name" active="false" fct="default function" weight="0.0"/>
+      <entry name="cost" active="true" fct="exact" weight="1.0"/>
+      <entry name="size" active="true" fct="default function" weight="1.0"/>
+      <entry name="color" active="true" fct="default function" weight="1"/>
+      <entry name="taste" active="true" fct="default function" weight="1.0"/>
+    </amalgam>
+    <amalgam name="default function" type="EUCLIDEAN" active="true" >
+      <entry name="name" active="true" fct="default function" weight="1.0"/>
+      <entry name="cost" active="true" fct="default function" weight="1.0"/>
+      <entry name="size" active="true" fct="default function" weight="1.0"/>
+      <entry name="color" active="true" fct="default function" weight="1"/>
+      <entry name="taste" active="true" fct="default function" weight="1.0"/>
+    </amalgam>
+  </concept>
+</model>
+<hierarchy>
+  <fct name="default function" type="Taxonomy" mt="PARTNER_QUERY" r="REUSE" t="MAX" qconfig="INNER_NODES_ANY" cconfig="INNER_NODES_ANY" top="inheritanceDesc" sim="0.0" symm="true" >
+    <node name="food" sim="1.0" parent="inheritanceDesc" />
+  </fct>
+</hierarchy>
+<cases no="10" cb="base"/>
+</Project>
