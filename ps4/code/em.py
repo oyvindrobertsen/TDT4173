@@ -31,7 +31,7 @@ def em_step(data, old_expectancy):
 i = 0
 MAX_ITER = 10000
 TOL = 1e-7
-expectancy = [-0.5, 0.5]
+expectancy = [3, -3]
 expectancies = [expectancy]
 with open('sample-data.txt') as f:
     data = np.array(map(float, f.read().splitlines()))
@@ -48,10 +48,12 @@ while i < MAX_ITER:
         i += 1
 
 print expectancy, i
-print expectancies
+for i, expectancy in enumerate(expectancies):
+    print i, expectancy
 plt.title("Source data histogram and EM-fitted Gaussians")
-plt.hist(data, bins=30, normed=True)
+plt.hist(data, bins=25, normed=True)
 xs = np.linspace(-3, 6, 200)
 plt.plot(xs, mlab.normpdf(xs, expectancy[0], 1))
 plt.plot(xs, mlab.normpdf(xs, expectancy[1], 1))
 plt.show()
+
