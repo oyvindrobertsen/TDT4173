@@ -37,6 +37,8 @@ def split_dataset(dataset):
     Split into two ~equal-sized parts
     """
     data = dataset.images.reshape((len(dataset.images), -1))
+    from random import shuffle
+    shuffle(data)
 
     training_data = data[0::2]
     test_data = data[1::2]
