@@ -5,9 +5,9 @@ import numpy as np
 from sklearn import svm, metrics
 from sklearn.datasets.base import Bunch
 
-from project.preprocessing import binarize
-from project.read_dataset import DATA_SHAPE, get_dataset
-from project.utils import int_to_letter
+from preprocessing import binarize
+from read_dataset import DATA_SHAPE, get_dataset
+from utils import int_to_letter
 
 """
 Modified from http://scikit-learn.org/stable/auto_examples/classification/plot_digits_classification.html#example-classification-plot-digits-classification-py
