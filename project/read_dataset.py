@@ -4,7 +4,7 @@ import os
 import numpy as np
 from PIL import Image
 
-from project.utils import letter_to_int
+from utils import letter_to_int
 
 DATA_DIR = 'chars74k-lite'
 DATA_SHAPE = (-1, 20, 20)

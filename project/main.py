@@ -13,7 +13,7 @@ from project.utils import int_to_letter
 Modified from http://scikit-learn.org/stable/auto_examples/classification/plot_digits_classification.html#example-classification-plot-digits-classification-py
 """
 
-N = 2
+N = 3
 
 
 def load_dataset(preprocessing_func=None):
@@ -71,13 +71,6 @@ def visualize(rows):
 
 dataset = load_dataset(preprocessing_func=binarize)
 training, test = split_dataset(dataset)
-
-print("####################")
-print(type(training))
-print(len(training.data[0]))
-print(len(training.data))
-print(len(training.target))
-print("####################")
 
 classifier = svm.LinearSVC()
 classifier.fit(training.data, training.target)
