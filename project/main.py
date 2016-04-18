@@ -2,10 +2,11 @@ from random import choice
 
 import matplotlib.pyplot as plt
 import numpy as np
-from project.read_dataset import DATA_SHAPE, get_dataset
-from sklearn import preprocessing
 from sklearn import svm, metrics
-from sklearn.datasets.base import Bunch, load_digits
+from sklearn.datasets.base import Bunch
+
+from project.preprocessing import binarize
+from project.read_dataset import DATA_SHAPE, get_dataset
 from project.utils import int_to_letter
 
 """
@@ -15,7 +16,7 @@ Modified from http://scikit-learn.org/stable/auto_examples/classification/plot_d
 N = 2
 
 
-def load_dataset():
+def load_dataset(preprocessing_func=None):
     # each row of the matrix is 400 pixel intensity values and 1 value representing the class of the image
     dataset_matrix = get_dataset(n=N)
 
@@ -23,14 +24,9 @@ def load_dataset():
     image_data = dataset_matrix[:, :-1]  # gets every column but the last, image data
 
     images = image_data.view()
-    images = preprocessing.scale(images)
 
-    binarizer = preprocessing.Binarizer(copy=False).fit(images)
-    binarizer.transform(images)
-
-    # pca = PCA(n_components = 400, copy = False, whiten = True)
-    # pca.fit(images[0])
-    # pca.transform(images)
+    if preprocessing_func:
+        images = preprocessing_func(images)
 
     images.shape = DATA_SHAPE
 
@@ -73,7 +69,7 @@ def visualize(rows):
     plt.show()
 
 
-dataset = load_dataset()
+dataset = load_dataset(preprocessing_func=binarize)
 training, test = split_dataset(dataset)
 
 print("####################")
