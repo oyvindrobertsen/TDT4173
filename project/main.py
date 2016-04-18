@@ -2,12 +2,11 @@ from random import choice
 
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn import svm, metrics, preprocessing
-from sklearn.decomposition import PCA
-from sklearn.datasets.base import Bunch
-
-from read_dataset import DATA_SHAPE, get_dataset
-from utils import int_to_letter
+from project.read_dataset import DATA_SHAPE, get_dataset
+from sklearn import preprocessing
+from sklearn import svm, metrics
+from sklearn.datasets.base import Bunch, load_digits
+from project.utils import int_to_letter
 
 """
 Modified from http://scikit-learn.org/stable/auto_examples/classification/plot_digits_classification.html#example-classification-plot-digits-classification-py
@@ -20,10 +19,7 @@ def load_dataset():
     # each row of the matrix is 400 pixel intensity values and 1 value representing the class of the image
     dataset_matrix = get_dataset(n=N)
 
-    #from random import shuffle
-    #shuffle(dataset_matrix)
-
-    targets = dataset_matrix[:, -1]  # gets the last column, classes
+    target = dataset_matrix[:, -1]  # gets the last column, classes
     image_data = dataset_matrix[:, :-1]  # gets every column but the last, image data
 
     images = image_data.view()
@@ -39,7 +35,7 @@ def load_dataset():
     images.shape = DATA_SHAPE
 
     return Bunch(data=image_data,
-                 targets=targets.astype(np.int),
+                 target=target.astype(np.int),
                  target_names=np.arange(N),
                  images=images,
                  DESCR='')
@@ -54,14 +50,14 @@ def split_dataset(dataset):
     training_data = data[0::2]
     test_data = data[1::2]
 
-    training_targets = dataset.targets[0::2]
-    test_targets = dataset.targets[1::2]
+    training_target = dataset.target[0::2]
+    test_target = dataset.target[1::2]
 
     training_images = dataset.images[0::2]
     test_images = dataset.images[1::2]
 
-    training = Bunch(data=training_data, targets=training_targets, images=training_images)
-    test = Bunch(data=test_data, targets=test_targets, images=test_images)
+    training = Bunch(data=training_data, target=training_target, images=training_images)
+    test = Bunch(data=test_data, target=test_target, images=test_images)
 
     return training, test
 
@@ -84,18 +80,18 @@ print("####################")
 print(type(training))
 print(len(training.data[0]))
 print(len(training.data))
-print(len(training.targets))
+print(len(training.target))
 print("####################")
 
 classifier = svm.LinearSVC()
-classifier.fit(training.data, training.targets)
+classifier.fit(training.data, training.target)
 predicted = classifier.predict(test.data)
 
 print("Classification report for classifier %s:\n%s\n"
-      % (classifier, metrics.classification_report(test.targets, predicted)))
-print("Confusion matrix:\n%s" % metrics.confusion_matrix(test.targets, predicted))
+      % (classifier, metrics.classification_report(test.target, predicted)))
+print("Confusion matrix:\n%s" % metrics.confusion_matrix(test.target, predicted))
 
-images_and_labels = tuple(zip(training.images, training.targets))
+images_and_labels = tuple(zip(training.images, training.target))
 images_and_predictions = tuple(zip(test.images, predicted))
 
 n = 16
