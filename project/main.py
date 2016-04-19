@@ -120,9 +120,11 @@ if __name__ == '__main__':
 
     classifier = svm.LinearSVC()
 
+    combined = lambda images: oriented_gradients(binarize(images))
+
     train_and_test_classifier(
         dataset,
         classifier=classifier,
-        preprocessing_func=oriented_gradients,
+        preprocessing_func=combined,
         visualize_n=20
     )

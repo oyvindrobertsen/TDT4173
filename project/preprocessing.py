@@ -5,6 +5,7 @@ from skimage.feature import hog
 from skimage import data, color, exposure
 
 def binarize(images):
+    images = images.reshape((len(images), 400))
     images = preprocessing.scale(images)
 
     binarizer = preprocessing.Binarizer(copy=False).fit(images)
