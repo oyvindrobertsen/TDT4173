@@ -15,11 +15,11 @@ def binarize(images):
 
     return images
 
-def oriented_gradients(images, imageshape=(20,20), celldims=[4, 5, 8]):
+def oriented_gradients(images, imageshape=(20,20)):
 
     images = images.reshape((len(images), imageshape[0], imageshape[1]))
 
-    # celldims = [x/imageshape[0] for x in [2.0, 4.0, 8.0]]
+    celldims = [imageshape[0]/x for x in [8.0, 4.0, 2.0]]
 
     def h(dim, image):
         return hog(image, orientations = 4, pixels_per_cell = (dim, dim),  
