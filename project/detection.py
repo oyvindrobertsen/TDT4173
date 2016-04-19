@@ -1,5 +1,5 @@
 import numpy as np
-from skimage.transform._warps import resize
+from skimage.transform import resize
 from sklearn.datasets.base import load_digits
 from sklearn.svm.classes import LinearSVC
 
@@ -55,16 +55,12 @@ if __name__ == '__main__':
     classifier = LinearSVC()
     classifier.fit(dataset.data, dataset.target)
 
-    path = "OCR-font-samples.jpg"
+    path = "HELLO.png"
 
     windows = sliding_windows(
         path,
-        stride=5,
-        window_size=(15, 15)
+        stride=10,
+        window_size=(40, 40)
     )
 
-    print(windows[40:60])
-
-    # windows = resize_imgs(windows, (8, 8))
-
-    # print(classifier.predict(flatten_imgs(windows)))
+    print(windows)
