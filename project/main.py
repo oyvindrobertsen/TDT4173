@@ -5,7 +5,12 @@ import numpy as np
 from sklearn import svm, metrics
 from sklearn.datasets.base import Bunch
 
-from preprocessing import binarize
+from sklearn.decomposition import RandomizedPCA
+from sklearn.preprocessing import StandardScaler
+
+from sklearn.neighbors import KNeighborsClassifier
+
+from preprocessing import binarize, oriented_gradients
 from read_dataset import DATA_SHAPE, get_dataset
 from utils import int_to_letter
 
@@ -13,26 +18,20 @@ from utils import int_to_letter
 Modified from http://scikit-learn.org/stable/auto_examples/classification/plot_digits_classification.html#example-classification-plot-digits-classification-py
 """
 
-N = 3
-
-
-def load_dataset(preprocessing_func=None):
-    # each row of the matrix is 400 pixel intensity values and 1 value representing the class of the image
-    dataset_matrix = get_dataset(n=N)
+def load_dataset(n=25):
+    # each row of the matrix is x pixel intensity values and 1 value representing the class of the image
+    dataset_matrix = get_dataset(n)
 
     target = dataset_matrix[:, -1]  # gets the last column, classes
     image_data = dataset_matrix[:, :-1]  # gets every column but the last, image data
 
     images = image_data.view()
 
-    if preprocessing_func:
-        images = preprocessing_func(images)
-
     images.shape = DATA_SHAPE
 
     return Bunch(data=image_data,
                  target=target.astype(np.int),
-                 target_names=np.arange(N),
+                 target_names=np.arange(ALPHABET_SIZE),
                  images=images,
                  DESCR='')
 
@@ -41,7 +40,7 @@ def split_dataset(dataset):
     """
     Split into two ~equal-sized parts
     """
-    data = dataset.images.reshape((len(dataset.images), -1))
+    data = dataset.images
 
     training_data = data[0::2]
     test_data = data[1::2]
@@ -64,27 +63,66 @@ def visualize(rows):
             plt.subplot(len(rows), len(images), index + 1 + r * len(images))
             plt.axis('off')
             plt.imshow(image, cmap=plt.cm.gray_r, interpolation='nearest')
-            plt.title('{}: {}'.format(title, int_to_letter(label)))
+            if title:
+                plt.title('{}: {}'.format(title, int_to_letter(label)))
+            else:
+                plt.title(int_to_letter(label))
 
     plt.show()
 
 
-dataset = load_dataset(preprocessing_func=binarize)
-training, test = split_dataset(dataset)
+def train_and_test_classifier(dataset, classifier, preprocessing_func=None, visualize_n=0):
+    training, test = split_dataset(dataset)
 
-classifier = svm.LinearSVC()
-classifier.fit(training.data, training.target)
-predicted = classifier.predict(test.data)
+    # pca = RandomizedPCA(n_components=1)
+    # std_scaler = StandardScaler()
+    #
+    # X_train = pca.fit_transform(training.data)
+    # X_test  = pca.fit_transform(test.data)
+    #
+    # X_train = std_scaler.fit_transform(X_train)
+    # X_test = std_scaler.fit_transform(X_test)
+    #
+    # classifier = KNeighborsClassifier(n_neighbors=1)
+    # classifier.fit(X_train, training.target)
 
-print("Classification report for classifier %s:\n%s\n"
-      % (classifier, metrics.classification_report(test.target, predicted)))
-print("Confusion matrix:\n%s" % metrics.confusion_matrix(test.target, predicted))
+    if preprocessing_func:
+        training_data = preprocessing_func(training.data)
+        test_data = preprocessing_func(test.data)
+    else:
+        training_data = training.data
+        test_data = test.data
 
-images_and_labels = tuple(zip(training.images, training.target))
-images_and_predictions = tuple(zip(test.images, predicted))
+    classifier.fit(training_data, training.target)
 
-n = 16
-visualize((
-    ('Training', tuple(choice(images_and_labels) for _ in range(n))),
-    ('Prediction', tuple(choice(images_and_predictions) for _ in range(n)))
-))
+    predicted = classifier.predict(test_data)
+
+    print("Classification report for classifier %s:\n%s\n"
+          % (classifier, metrics.classification_report(test.target, predicted)))
+    print("Confusion matrix:\n%s" % metrics.confusion_matrix(test.target, predicted))
+
+    if visualize_n:
+        images_and_labels = tuple(zip(training.images, training.target))
+        images_and_predictions = tuple(zip(test.images, predicted))
+
+        visualize((
+            ('', tuple(choice(images_and_labels) for _ in range(visualize_n))),
+            ('', tuple(choice(images_and_predictions) for _ in range(visualize_n)))
+        ))
+
+    return classifier
+
+if __name__ == '__main__':
+    np.set_printoptions(threshold=np.nan, linewidth=np.nan)
+
+    ALPHABET_SIZE = 25
+    dataset = load_dataset(n=ALPHABET_SIZE)
+
+    classifier = svm.LinearSVC()
+
+    train_and_test_classifier(
+        dataset,
+        classifier=classifier,
+        preprocessing_func=oriented_gradients,
+        visualize_n=20
+    )
