@@ -5,16 +5,24 @@ import numpy as np
 from sklearn import svm, metrics
 from sklearn.datasets.base import Bunch
 
-from preprocessing import binarize
+from sklearn.decomposition import RandomizedPCA
+from sklearn.preprocessing import StandardScaler
+
+from sklearn.neighbors import KNeighborsClassifier
+
+from preprocessing import binarize, oriented_gradients
 from read_dataset import DATA_SHAPE, get_dataset
 from utils import int_to_letter
+
+from sklearn.feature_extraction.image import img_to_graph
+
 
 """
 Modified from http://scikit-learn.org/stable/auto_examples/classification/plot_digits_classification.html#example-classification-plot-digits-classification-py
 """
 
-N = 2
-
+N = 25
+np.set_printoptions(threshold=np.nan, linewidth=np.nan)
 
 def load_dataset(preprocessing_func=None):
     # each row of the matrix is 400 pixel intensity values and 1 value representing the class of the image
@@ -28,7 +36,7 @@ def load_dataset(preprocessing_func=None):
     if preprocessing_func:
         images = preprocessing_func(images)
 
-    images.shape = DATA_SHAPE
+    # images.shape = DATA_SHAPE
 
     return Bunch(data=image_data,
                  target=target.astype(np.int),
@@ -41,7 +49,8 @@ def split_dataset(dataset):
     """
     Split into two ~equal-sized parts
     """
-    data = dataset.images.reshape((len(dataset.images), -1))
+    # data = dataset.images.reshape((len(dataset.images), -1))
+    data = dataset.images
 
     training_data = data[0::2]
     test_data = data[1::2]
@@ -69,18 +78,24 @@ def visualize(rows):
     plt.show()
 
 
-dataset = load_dataset(preprocessing_func=binarize)
+dataset = load_dataset(preprocessing_func=oriented_gradients)
 training, test = split_dataset(dataset)
 
-print("####################")
-print(type(training))
-print(len(training.data[0]))
-print(len(training.data))
-print(len(training.target))
-print("####################")
+# pca = RandomizedPCA(n_components=1)
+# std_scaler = StandardScaler()
+# 
+# X_train = pca.fit_transform(training.data)
+# X_test  = pca.fit_transform(test.data)
+# 
+# X_train = std_scaler.fit_transform(X_train)
+# X_test = std_scaler.fit_transform(X_test)
+# 
+# classifier = KNeighborsClassifier(n_neighbors=1)
+# classifier.fit(X_train, training.target)
 
 classifier = svm.LinearSVC()
 classifier.fit(training.data, training.target)
+
 predicted = classifier.predict(test.data)
 
 print("Classification report for classifier %s:\n%s\n"
@@ -90,8 +105,9 @@ print("Confusion matrix:\n%s" % metrics.confusion_matrix(test.target, predicted)
 images_and_labels = tuple(zip(training.images, training.target))
 images_and_predictions = tuple(zip(test.images, predicted))
 
+
 n = 16
 visualize((
-    ('Training', tuple(choice(images_and_labels) for _ in range(n))),
-    ('Prediction', tuple(choice(images_and_predictions) for _ in range(n)))
+    ('', tuple(choice(images_and_labels) for _ in range(n))),
+    ('', tuple(choice(images_and_predictions) for _ in range(n)))
 ))
