@@ -48,7 +48,7 @@
     \horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
 }
 
-\author{Peter Aaser, Mathias Ose, Øyvind Robertsen} % Your name
+\author{Peter Aaser, Mathias Ose \& Øyvind Robertsen} % Your name
 
 \date{\normalsize\today} % Today's date or a custom date
 
@@ -60,7 +60,19 @@
 %	PROBLEM 1
 %----------------------------------------------------------------------------------------
 
-\section{Theory}
+
+\section{Overview}
+
+Our system preprocesses images first by binarizing, creating a perfectly black and white image, then by reducing dimnsionality of the feature vector through a HOG process.
+We use a support vector classifier trained on 80\% of the Chars74K dataset.
+The system is implemented in Python 3, using the following libraries: \texttt{scikit-learn}, \texttt{scikit-images}, \texttt{numpy}, \texttt{matplotlib}.
+To run: \texttt{python3 main.py}.
+
+\section{Preprocessing}
+
+We preprocess images first by binarizing them, 
+
+
 
 \section{Classifiers}
 \subsection{SVC}
