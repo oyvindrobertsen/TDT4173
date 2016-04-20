@@ -92,7 +92,7 @@ We can't be sure whether this intuition was correct, but we got very nice result
 One flaw with using an svm is that our dataset consists of both small and big letters, essentially creating "islands" which would make it hard to partition the feature space into partitions consisting both of the big and small version of a letter.
 We are unsure how the SVM in scikit is implemented. 
 It is possible that several clusters may be formed for the same class which would explain why it performed so well, or perhaps the SVC found a way to create partitions containing both the small and the big version for each letter.
-\subesection{K Nearest neighbors}
+\subsection{K Nearest neighbors}
 In order to test out our theory that an SVC would suffer from different versions of letters we settled on k nearest neighbors as a second classifier.
 We believed this model would make up for the percieved difficulties that our SVC implementations faced, but we found that the results were fairly lackluster compared to the SVC implementation.
 We're not exactly sure why this happens, but one possibility is that since the linear SVC is forced to find the best fit it can more easily discard features which arise from random noise whereas k nearest neighbours does not.
