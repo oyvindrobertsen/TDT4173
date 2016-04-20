@@ -62,4 +62,18 @@
 
 \section{Theory}
 
+\section{Classifiers}
+Our approach to classifiers was driven by our lack of experience with using machine learning frameworks.
+When starting out we used a tutorial for recognizing hand written digits provided by scikit which happened to use a support vector classifier. %link til tutorial? http://scikit-learn.org/stable/auto_examples/classification/plot_digits_classification.html#example-classification-plot-digits-classification-py
+In our first attempt we simply extended the example from sklearn to create a dataset from 74k-lite to see what kind of performance we would get.
+After getting very lackluster results we first thought there was an error in our program, a test run using only the a's and b's predicted only a's which made us spend time debugging.
+A quick look on the datasets revealed why we were wrong: the example we followed used a set of 10*10 images which were all cleanly written. 
+Compared to our pictures which featured many different fonts and four times as many pixels the task of classifying the example images was much smaller.
+Realizing this we tried implementing some preprocessors to see how our classifiers fared with inputs featuring lower dimensionality.
+Returning to the classifier we resumed our trials with our arbitrarily chosen SVC.
+The standard sklearn SVC implementation uses an rbf kernel, standing for radial basis function network.
+Because we did not know how rbf worked we decided to try out a linear kernel instead.
+This made sense not only because of the approachability compared to the complex rbf implementation, but also because we had a somewhat intuitive understanding of why it could perform well.
+
+
 \end{document}
