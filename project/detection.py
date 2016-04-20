@@ -1,39 +1,44 @@
+import matplotlib.pyplot as plt
 import numpy as np
 from skimage.transform import resize
-from sklearn.datasets.base import load_digits
 from sklearn.svm.classes import LinearSVC
 
+from main import load_dataset, train_and_test_classifier
+from preprocessing import oriented_gradients
 from read_dataset import read_img_to_array
-from utils import get_image_shape
+from utils import get_image_shape, int_to_letter
 
 
 def sliding_windows(path, stride, window_size):
     window_w, window_h = window_size
 
     shape = img_w, img_h = get_image_shape(path)
+    is_within_bounds = lambda l, r, t, b: (l >= 0 and t >= 0) and (r < img_w and b < img_h)
 
-    arr = np.array(read_img_to_array(path), dtype=np.uint8, order='C')
+    arr = np.array(read_img_to_array(path), dtype=np.uint8)
     arr = np.reshape(arr, (img_h, img_w))
 
-    windows = []
+    m = []
 
     dw = window_w // 2
     dh = window_h // 2
     for y in range(dh, img_h, stride):
         for x in range(dw, img_w, stride):
-            x_a = x - dw
-            x_b = x + dw
-            y_a = y - dh
-            y_b = y + dh
+            left = x - dw
+            right = x + dw
+            top = y - dh
+            bottom = y + dh
 
-            if x_a < 0 or x_b > img_w or y_a < 0 or y_b > img_h:
+            if not is_within_bounds(left, right, top, bottom):
                 continue
 
-            window = arr[y_a:y_b, x_a:x_b]
+            window = arr[top:bottom, left:right]
 
-            windows.append(window)
+            row = np.append(window.reshape(a * b), (x, y))
 
-    return np.array(windows)
+            m.append(row)
+
+    return np.array(m)
 
 
 def resize_imgs(imgs, size):
@@ -48,19 +53,48 @@ def flatten_imgs(imgs):
 
 
 if __name__ == '__main__':
-    np.set_printoptions(threshold=np.nan, linewidth=np.nan)
+    dataset = load_dataset()
 
-    dataset = load_digits()
+    classifier = train_and_test_classifier(
+        dataset,
+        classifier=LinearSVC(),
+        preprocessing_func=lambda images: oriented_gradients((images), shape=(20, 20))
+    )
 
-    classifier = LinearSVC()
-    classifier.fit(dataset.data, dataset.target)
+    print("\nFinding windows\n")
 
-    path = "HELLO.png"
+    path = "doodeedoo.jpg"
 
+    window_size = a, b = (50, 50)
     windows = sliding_windows(
         path,
         stride=10,
-        window_size=(40, 40)
+        window_size=window_size
     )
 
-    print(windows)
+    target = windows[:, -2:]  # xy columns
+    image_data = windows[:, :-2]  # image data
+
+    preprocess_test = lambda images: oriented_gradients((images), shape=window_size)
+    test_data = preprocess_test(image_data)
+
+    print("\nTesting windows\n")
+
+    decisions = classifier.decision_function(test_data)
+
+    z = zip(decisions, target)
+    z = sorted(z, key=lambda dt: -max(dt[0]))
+
+    max_vals = [max(d) for d, t in z[:10]]
+
+    im = plt.imread(path)
+    implot = plt.imshow(im, cmap=plt.cm.gray)
+
+    for d, t in z:
+        m = max(d)
+        letter = int_to_letter(max(range(25), key=lambda n: d[n]))
+        if m > 1.0:
+            a, b = t
+            plt.annotate(letter, (a, b), color='r', size=int(10 * m))
+
+    plt.show()
