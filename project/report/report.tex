@@ -188,6 +188,15 @@ If we had more time we would like to try more advanced techniques such as convol
 Another interesting idea is combinining both the SVC and the K nearest neighbors classifiers as an ensemble to study how the performance would improve, 
 investigating how dominant the k nearest neighbors classifier really is.
 
+We feel that the strongest component of our system is the spatial-pyramid-pooling inspired HOG analysis.
+It very effectively reduces dimentionality of the feature vector, while still expressing how shapes in the image correlate spatialy.
+It is also makes the system resolution independent, making it easier to use for our detector.
+
+On the other hand, we feel the detector is the weakest part.
+It performs reasonable when there is little going on in the image.
+Images with complex handwriting and many other features apart from letters, will cause it to yield false positives.
+Arguably, this is also a fault with our preprocessor, as one way of improving this performance would be to intelligently remove noice in that step.
+
 \bibliographystyle{plain}
 \bibliography{references.bib} 
 
