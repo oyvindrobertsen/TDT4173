@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 
 from sklearn.neighbors import KNeighborsClassifier
 
-from preprocessing import binarize, oriented_gradients
+from preprocessing import binarize, oriented_gradients, rpca
 from read_dataset import DATA_SHAPE, get_dataset
 from utils import int_to_letter
 
@@ -74,18 +74,6 @@ def visualize(rows):
 def train_and_test_classifier(dataset, classifier, preprocessing_func=None, visualize_n=0):
     training, test = split_dataset(dataset)
 
-    # pca = RandomizedPCA(n_components=1)
-    # std_scaler = StandardScaler()
-    #
-    # X_train = pca.fit_transform(training.data)
-    # X_test  = pca.fit_transform(test.data)
-    #
-    # X_train = std_scaler.fit_transform(X_train)
-    # X_test = std_scaler.fit_transform(X_test)
-    #
-    # classifier = KNeighborsClassifier(n_neighbors=1)
-    # classifier.fit(X_train, training.target)
-
     if preprocessing_func:
         training_data = preprocessing_func(training.data)
         test_data = preprocessing_func(test.data)
@@ -119,8 +107,15 @@ if __name__ == '__main__':
     dataset = load_dataset(n=ALPHABET_SIZE)
 
     classifier = svm.LinearSVC()
+    # classifier = KNeighborsClassifier(
+    #         n_neighbors=20,
+    #         algorithm='kd_tree',
+    #         weights='distance'
+    #         )
 
     combined = lambda images: oriented_gradients(binarize(images))
+
+    # classifier.fit(combined)
 
     train_and_test_classifier(
         dataset,

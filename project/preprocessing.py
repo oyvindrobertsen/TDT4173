@@ -4,6 +4,9 @@ import numpy as np
 from skimage.feature import hog
 from skimage import data, color, exposure
 
+from sklearn.decomposition import RandomizedPCA
+from sklearn.preprocessing import StandardScaler
+
 from functools import reduce
 
 def binarize(images):
@@ -19,7 +22,7 @@ def oriented_gradients(images, imageshape=(20,20)):
 
     images = images.reshape((len(images), imageshape[0], imageshape[1]))
 
-    celldims = [imageshape[0]/x for x in [8.0, 4.0, 2.0]]
+    celldims = [imageshape[0]/x for x in [5, 4, 2]]
 
     def h(dim, image):
         return hog(image, orientations = 4, pixels_per_cell = (dim, dim),  
@@ -30,3 +33,12 @@ def oriented_gradients(images, imageshape=(20,20)):
 
     return np.array([pool(image) for image in images])
 
+def rpca(images):
+
+    pca = RandomizedPCA(n_components=100)
+    std_scaler = StandardScaler()
+    
+    X_train = pca.fit_transform(images)
+    X_train = std_scaler.fit_transform(X_train)
+
+    return X_train
