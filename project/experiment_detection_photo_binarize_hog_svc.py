@@ -6,14 +6,14 @@ from sklearn.svm.classes import LinearSVC
 from dataset import load_dataset, IMG_DIR
 from detection import sliding_windows
 from train import train_and_test_classifier
-from preprocessing import oriented_gradients
+from preprocessing import oriented_gradients, binarize
 from utils import int_to_letter
 
 path = os.path.join(IMG_DIR, "illuminati.jpg")
 window_size = a, b = (50, 50)
 stride = 10
 threshold = 0.5
-make_pre_func = lambda shape: (lambda images: oriented_gradients((images), shape=shape))
+make_pre_func = lambda shape: (lambda images: oriented_gradients(binarize(images), shape=shape))
 classifier = LinearSVC()
 
 if __name__ == '__main__':

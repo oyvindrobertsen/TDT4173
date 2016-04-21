@@ -13,6 +13,8 @@
 \usepackage{graphicx}
 \usepackage{float}
 
+\usepackage{hyperref}
+
 \usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
 
 \usepackage{sectsty} % Allows customizing section commands
@@ -57,29 +59,32 @@
 \maketitle % Print the title
 
 \section{System Overview}
-The system is implemented in Python 3, using the libraries \texttt{scikit-learn}, \texttt{scikit-images}, \texttt{Pillow}, \texttt{numpy}, \texttt{matplotlib}.
+The system is implemented in Python 3, using the libraries \texttt{scikit-learn}, \texttt{scikit-images}, \texttt{Pillow}, \texttt{numpy} and \texttt{matplotlib}.
+We used a digit-classifier example from scikit-learn \cite{bib:scikit-digits} as a starting point.
 
 The system is written in a modular fashion, allowing us to easily swap in and out preprocessing functions or classifier models.
 The libraries used do most of the heavy lifting, with our task as programmers mostly just to compose the library functions in a sensible way.
 
-\hspace{0.25cm}
-
 A typical use-case is something like:
-    \begin{enumerate}
-        \item   Select a classifier model, preprocessing function and various other parameters.
-        \item   Load dataset and split into training set and test set.
-        \item   Preprocess the training set and train the selected classifier on it.
-        \item   Preprocess the test set and have the trained classifier classify the set.
-        \item   Assess the success rate of the classifier test.
-        \item   Load a test image and use the sliding windows function to extract samples from it.
-        \item   Have the trained learner classify these samples.
-        \item   Output the results on top of the image.
-    \end{enumerate}
+\begin{enumerate}
+    \item   Select a classifier model, preprocessing function and various other parameters.
+    \item   Load dataset and split into training set and test set.
+    \item   Preprocess the training set and train the selected classifier on it.
+    \item   Preprocess the test set and have the trained classifier classify the set.
+    \item   Assess the success rate of the classifier test.
+\end{enumerate}
 
-Various experiments have been stored as `.py` files that can be run from command line.
+And additionally when involving the text detection part:
+\begin{enumerate}
+    \setcounter{enumi}{6}
+    \item   Load a test image and use the sliding windows function to extract samples from it.
+    \item   Have the trained learner classify these samples.
+    \item   Output the results on top of the image.
+\end{enumerate}
+
+Various experiments have been stored as \texttt{.py} files that can be run from command line.
 
 \section{Preprocessing}
-
 We tested several preprocessing techniques and combinations thereof,
 such as morphological closing, binarisation and histogram of gradients
 analysis.  A combination of binarization and histogram of gradients
@@ -91,14 +96,17 @@ degraded performance.  While for instance erosion might reduce
 unwanted noise in images, it is not very discriminatory about what it
 removes, resulting in key features being removed from images.
 
-Histogram of gradients analysis partitions the image into cells and
+The most complex and also most useful preprocessing method implemented is the \textit{Histogram of oriented gradients} (HOG),
+which partitions the image into cells and
 outputs a vector of gradients, one for each cell.  Inspired by He et
 al~\cite{bib:spp}, we perform several rounds of analysis, with varying
 cell dimensions, and combine the results, to better correlate features
-spatially in the feature vectors. This also makes our classifier
-resolution independent.
+spatially in the feature vectors.
+We also make sure the number of features returned by this method is the same,
+independent of resolution of the input image.
+This enables us to train and test the classifier on different-sized images.
 
-Figure~\ref{fig:preprocessing} illustrates our preprocessing pipeline.
+Figure~\ref{fig:preprocessing} illustrates a preprocessing pipeline where the binarization and HOG methods are both applied.
 
 \begin{figure}[H]
     \centering
@@ -109,42 +117,50 @@ Figure~\ref{fig:preprocessing} illustrates our preprocessing pipeline.
 \section{Classifiers}
 \subsection{SVC}
 Our approach to classifiers was driven by our lack of experience with
-using machine learning frameworks.  When starting out we used a
-tutorial for recognizing hand written digits provided by scikit which
-happened to use a support vector classifier.\\
-In our first attempt we simply extended the example from sklearn to
-create a dataset from 74k-lite to see what kind of performance we
-would get.  After getting very lackluster results we first thought
-there was an error in our program, a test run using only the a's and
-b's predicted only a's which made us spend time debugging.  A quick
-look on the datasets revealed why we were wrong: the example we
-followed used a set of 10*10 images which were all cleanly written.\\
-Compared to our pictures which featured many different fonts and four
-times as many pixels the task of classifying the example images was
-much smaller.  Realizing this we tried implementing some preprocessors
-to see how our classifiers fared with inputs featuring lower
-dimensionality.  Returning to the classifier we resumed our trials
-with our arbitrarily chosen SVC.\\  The standard sklearn SVC
-implementation uses an rbf kernel, standing for radial basis function
-network.  Because we did not know how rbf worked we decided to try out
+using machine learning frameworks.
+Our starting point was an example of a scikit-learn digit-classifier.
+
+In our first attempt we modified the example from scikit-learn to
+use the 74k-lite dataset to see what kind of performance we
+would get.
+This example uses a support vector classifier (SVC).
+This did not yield good results, even when we reduced the alphabet size to have fewer classes.
+Because the digits in the scikit-learn dataset are written very cleanly and in just 8x8 pixels,
+the classifier has an easier time learning the dataset.
+With our letter dataset the resolution is 20x20 pixels, and the images are much more noisy.
+
+At this point we turned our attention to implementing preprocessing, as discussed in the previous section.
+Returning to the classifier we resumed our trials
+with our arbitrarily chosen SVC.
+
+The standard sklearn SVC
+implementation uses a \textit{radial basis function} (rbf) kernel network.
+Because we did not know how rbf worked we decided to try out
 a linear kernel instead.  This made sense not only because of the
 approachability compared to the complex rbf implementation, but also
 because we had a somewhat intuitive understanding of why it could
-perform well.\\  With our radial orientation scheme we predicted that
+perform well.
+
+With our radial orientation scheme we predicted that
 the amount of angled surfaces in letters would be linearly separable
 allowing the linear SVC to perform well.  We can't be sure whether
 this intuition was correct, but we got very nice results, handily
-beating our initial rbf kernel implementation.\\  One flaw with using an
-svm is that our dataset consists of both small and big letters,
+beating our initial rbf kernel implementation.
+
+One flaw with using an
+SVC is that our dataset consists of both small and big letters,
 essentially creating "islands" which would make it hard to partition
 the feature space into partitions consisting both of the big and small
-version of a letter.  We are unsure how the SVM in scikit is
+version of a letter.  We are unsure how the SVC in scikit is
 implemented, it is possible that several clusters may be formed for
 the same class which would explain why it performed so well, or
 perhaps the SVC found a way to create partitions containing both the
-small and the big version for each letter.\\  The best result we
+small and the big version for each letter.
+
+The best result we
 obtained with a linear classifier was a precision of 0.78 which was
-achieved when first binarizing the images and then applying HOG.\\
+achieved when first binarizing the images and then applying HOG.
+
 We expected HOG to perform fairly well on images without
 applying binarization as HOG should be able to deal with noise.  With
 no binarization the classifier reached a score of 0.76 which tells us
@@ -152,6 +168,7 @@ that while HOG pulls most of the weight the additional step of
 binarization is still worthwhile, yielding an ~8\% reductiong of
 missclassifications.  The following table shows the performance of our
 SVC using different parameters:
+
 \begin{table}[H]
     \centering
     \begin{tabular}{l | l | l}
@@ -166,7 +183,7 @@ SVC using different parameters:
 
 \subsection{K Nearest neighbors}
 In order to test out our theory that an SVC would suffer from
-different versions of letters we settled on k nearest neighbors as a
+different versions of letters we settled on \textit{K nearest neighbors} as a
 second classifier.  We hypothesized that this method would perform
 better based on our suspected weakness of the SVC since nearest
 neighbours does not rely on partitioning the feature space.  Our best
@@ -175,7 +192,8 @@ neighbours linearly weighted by manhattan distance, yielding a fairly
 decent improvement.  Not only did K nearest outperform SVC, it also
 did so without having to use the binarization preprocessing step.
 We're not sure why binarization is nescessary using SVC compared to K
-nearest % postuler no greier her..? % The following table shows the
+nearest.
+The following table shows the
 performance of our K nearest classifier using different parameters:
 
 \begin{table}[H]

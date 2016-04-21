@@ -6,7 +6,7 @@ from sklearn.svm.classes import LinearSVC
 from dataset import load_dataset, IMG_DIR
 from detection import sliding_windows
 from preprocessing import oriented_gradients, binarize
-from experiment_training import train_and_test_classifier
+from train import train_and_test_classifier
 from utils import int_to_letter
 
 path = os.path.join(IMG_DIR, "abcdefgh.png")
@@ -14,11 +14,12 @@ window_size = a, b = (20, 20)
 stride = 10
 threshold = 1.0
 make_pre_func = lambda shape: (lambda images: oriented_gradients(binarize(images), shape=shape))
+classifier = LinearSVC()
 
 if __name__ == '__main__':
     classifier = train_and_test_classifier(
         load_dataset(),
-        classifier=LinearSVC(),
+        classifier=classifier,
         preprocessing_func=make_pre_func(shape=(20, 20))
     )
 
