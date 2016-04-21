@@ -2,7 +2,7 @@ from sklearn import svm
 
 from dataset import load_dataset
 from preprocessing import binarize, oriented_gradients
-from train import train_and_test_classifier
+from experiment_training import train_and_test_classifier
 
 if __name__ == '__main__':
     dataset = load_dataset()

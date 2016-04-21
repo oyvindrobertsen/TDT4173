@@ -1,17 +1,19 @@
 import os
+
 import matplotlib.pyplot as plt
 from sklearn.svm.classes import LinearSVC
+
 from dataset import load_dataset, IMG_DIR
 from detection import sliding_windows
 from preprocessing import oriented_gradients, binarize
-from train import train_and_test_classifier
+from experiment_training import train_and_test_classifier
 from utils import int_to_letter
 
-path = os.path.join(IMG_DIR, "illuminati.jpg")
-window_size = a, b = (50, 50)
+path = os.path.join(IMG_DIR, "abcdefgh.png")
+window_size = a, b = (20, 20)
 stride = 10
-threshold = 2.0
-make_pre_func = lambda shape: (lambda images: oriented_gradients((images), shape=shape))
+threshold = 1.0
+make_pre_func = lambda shape: (lambda images: oriented_gradients(binarize(images), shape=shape))
 
 if __name__ == '__main__':
     classifier = train_and_test_classifier(
@@ -36,8 +38,6 @@ if __name__ == '__main__':
 
     z = zip(decisions, target)
     z = sorted(z, key=lambda dt: -max(dt[0]))
-
-    print(*[max(d) for d, t in z], sep='\n')
 
     im = plt.imread(path)
     implot = plt.imshow(im, cmap=plt.cm.gray)

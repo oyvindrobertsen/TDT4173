@@ -56,20 +56,27 @@
 
 \maketitle % Print the title
 
-%----------------------------------------------------------------------------------------
-%	PROBLEM 1
-%----------------------------------------------------------------------------------------
+\section{System Overview}
+The system is implemented in Python 3, using the libraries \texttt{scikit-learn}, \texttt{scikit-images}, \texttt{Pillow}, \texttt{numpy}, \texttt{matplotlib}.
 
+The system is written in a modular fashion, allowing us to easily swap in and out preprocessing functions or classifier models.
+The libraries used do most of the heavy lifting, with our task as programmers mostly just to compose the library functions in a sensible way.
 
-\section{Overview}
+\hspace{0.25cm}
 
-Our system preprocesses images first by binarizing, creating a
-perfectly black and white image, then by reducing dimnsionality of the
-feature vector through a HOG process.  We use a support vector
-classifier trained on 80\% of the Chars74K dataset.  The system is
-implemented in Python 3, using the following libraries:
-\texttt{scikit-learn}, \texttt{scikit-images}, \texttt{numpy},
-\texttt{matplotlib}.  To run: \texttt{python3 main.py}.
+A typical use-case is something like:
+    \begin{enumerate}
+        \item   Select a classifier model, preprocessing function and various other parameters.
+        \item   Load dataset and split into training set and test set.
+        \item   Preprocess the training set and train the selected classifier on it.
+        \item   Preprocess the test set and have the trained classifier classify the set.
+        \item   Assess the success rate of the classifier test.
+        \item   Load a test image and use the sliding windows function to extract samples from it.
+        \item   Have the trained learner classify these samples.
+        \item   Output the results on top of the image.
+    \end{enumerate}
+
+Various experiments have been stored as `.py` files that can be run from command line.
 
 \section{Preprocessing}
 
@@ -170,6 +177,7 @@ did so without having to use the binarization preprocessing step.
 We're not sure why binarization is nescessary using SVC compared to K
 nearest % postuler no greier her..? % The following table shows the
 performance of our K nearest classifier using different parameters:
+
 \begin{table}[H]
     \centering
     \begin{tabular}{l | l | l | l | l}
@@ -182,6 +190,9 @@ performance of our K nearest classifier using different parameters:
     \end{tabular}
     \caption{Performance for different configurations using a K nearest neighbors classifier}
 \end{table}
+
+\input{detection}
+
 \subsection{Evaluation}
 Considering our lack of experience with text recognition we are fairly happy with how well the classifier performs.
 If we had more time we would like to try more advanced techniques such as convolutional neural nets to see if they could do any better.
@@ -196,6 +207,7 @@ On the other hand, we feel the detector is the weakest part.
 It performs reasonable when there is little going on in the image.
 Images with complex handwriting and many other features apart from letters, will cause it to yield false positives.
 Arguably, this is also a fault with our preprocessor, as one way of improving this performance would be to intelligently remove noice in that step.
+
 
 \bibliographystyle{plain}
 \bibliography{references.bib} 
