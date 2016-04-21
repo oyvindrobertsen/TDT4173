@@ -8,6 +8,9 @@ from sklearn.preprocessing import StandardScaler
 
 
 def binarize(images):
+    """
+    Thresholding with a dynamically picked threshold value
+    """
     images = preprocessing.scale(images)
 
     binarizer = preprocessing.Binarizer(copy=False).fit(images)
@@ -17,6 +20,12 @@ def binarize(images):
 
 
 def oriented_gradients(images, shape=(20, 20)):
+    """
+    Uses scikit-learn histogram of oriented gradients to find features in the input image.
+      By specifying the shape of the input we can adjust the dimensions of the cells used by
+       the hog algorithm, ensuring we get a fixed number of features to send to the learner.
+       This way we can use images of different sizes with the same learner.
+    """
     a, b = shape
     images = images.reshape((-1, a, b))
 
