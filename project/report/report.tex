@@ -104,40 +104,40 @@ Figure~\ref{fig:preprocessing} illustrates our preprocessing pipeline.
 Our approach to classifiers was driven by our lack of experience with
 using machine learning frameworks.  When starting out we used a
 tutorial for recognizing hand written digits provided by scikit which
-happened to use a support vector classifier.
+happened to use a support vector classifier.\\
 In our first attempt we simply extended the example from sklearn to
 create a dataset from 74k-lite to see what kind of performance we
 would get.  After getting very lackluster results we first thought
 there was an error in our program, a test run using only the a's and
 b's predicted only a's which made us spend time debugging.  A quick
 look on the datasets revealed why we were wrong: the example we
-followed used a set of 10*10 images which were all cleanly written.
+followed used a set of 10*10 images which were all cleanly written.\\
 Compared to our pictures which featured many different fonts and four
 times as many pixels the task of classifying the example images was
 much smaller.  Realizing this we tried implementing some preprocessors
 to see how our classifiers fared with inputs featuring lower
 dimensionality.  Returning to the classifier we resumed our trials
-with our arbitrarily chosen SVC.  The standard sklearn SVC
+with our arbitrarily chosen SVC.\\  The standard sklearn SVC
 implementation uses an rbf kernel, standing for radial basis function
 network.  Because we did not know how rbf worked we decided to try out
 a linear kernel instead.  This made sense not only because of the
 approachability compared to the complex rbf implementation, but also
 because we had a somewhat intuitive understanding of why it could
-perform well.  With our radial orientation scheme we predicted that
+perform well.\\  With our radial orientation scheme we predicted that
 the amount of angled surfaces in letters would be linearly separable
 allowing the linear SVC to perform well.  We can't be sure whether
 this intuition was correct, but we got very nice results, handily
-beating our initial rbf kernel implementation.  One flaw with using an
+beating our initial rbf kernel implementation.\\  One flaw with using an
 svm is that our dataset consists of both small and big letters,
 essentially creating "islands" which would make it hard to partition
 the feature space into partitions consisting both of the big and small
 version of a letter.  We are unsure how the SVM in scikit is
-implemented.  It is possible that several clusters may be formed for
+implemented, it is possible that several clusters may be formed for
 the same class which would explain why it performed so well, or
 perhaps the SVC found a way to create partitions containing both the
-small and the big version for each letter.  The best result we
+small and the big version for each letter.\\  The best result we
 obtained with a linear classifier was a precision of 0.78 which was
-achieved when first binarizing the images and then applying HOG % with[5, 4, 2]
+achieved when first binarizing the images and then applying HOG.\\
 We expected HOG to perform fairly well on images without
 applying binarization as HOG should be able to deal with noise.  With
 no binarization the classifier reached a score of 0.76 which tells us
@@ -145,13 +145,17 @@ that while HOG pulls most of the weight the additional step of
 binarization is still worthwhile, yielding an ~8\% reductiong of
 missclassifications.  The following table shows the performance of our
 SVC using different parameters:
-
-\begin{tabular}{l | l | l}
-    Kernel & preprocessing & precision\\ \hline
-    Linear & binarization \& HOG & 0.78 \\ \hline
-    Linear & binarization & 0.11 \\ \hline
-    Linear & HOG & 0.76\\ \hline
-\end{tabular}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l | l | l}
+        Kernel & preprocessing & precision\\ \hline
+        Linear & binarization \& HOG & 0.78 \\ \hline
+        Linear & binarization & 0.11 \\ \hline
+        Linear & HOG & 0.76\\ \hline
+        RBF & binarization \& HOG & 0.76\\
+    \end{tabular}
+    \caption{Performance for different configurations using SVC}
+\end{table}
 
 \subsection{K Nearest neighbors}
 In order to test out our theory that an SVC would suffer from
@@ -166,14 +170,22 @@ did so without having to use the binarization preprocessing step.
 We're not sure why binarization is nescessary using SVC compared to K
 nearest % postuler no greier her..? % The following table shows the
 performance of our K nearest classifier using different parameters:
-\begin{tabular}{l | l | l | l | l}
-    K (neighbors) & weight & distance measure & preprossesing & precision\\ \hline
-    10 & linear distance & euclidean & HOG & 0.80\\ \hline
-    10 & uniform & HOG & euclidean & 0.79\\ \hline
-    5 & uniform & HOG & euclidean & 0.79\\ \hline
-    10 & linear & HOG & manhattan & 0.81\\ \hline
-    10 & linear & HOG \& binarization & manhattan & 0.81\\ \hline
-\end{tabular}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l | l | l | l | l}
+        K (neighbors) & weight & distance measure & preprossesing & precision\\ \hline
+        10 & linear distance & euclidean & HOG & 0.80\\ \hline
+        10 & uniform & euclidean & HOG & 0.79\\ \hline
+        5 & uniform & euclidean & HOG & 0.79\\ \hline
+        10 & linear & manhattan & HOG & 0.81\\ \hline
+        10 & linear & manhattan & HOG \& binarization & 0.81\\
+    \end{tabular}
+    \caption{Performance for different configurations using a K nearest neighbors classifier}
+\end{table}
+\subsection{Evaluation}
+Considering our lack of experience with text recognition we are fairly happy with how well the classifier performs.
+If we had more time we would like to try more advanced techniques such as convolutional neural nets to see if they could do any better.
+Another interesting approach would be to combine both the SVC and the K nearest neighbors classifier as an ensemble to study wether the performance would improve so we could 
     
 \bibliographystyle{plain}
 \bibliography{references.bib} 
