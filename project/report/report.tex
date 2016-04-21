@@ -95,12 +95,29 @@ It is possible that several clusters may be formed for the same class which woul
 The best result we obtained with a linear classifier was a precision of 0.78 which was achieved when first binarizing the images and then applying HOG % with [5, 4, 2]
 We expected HOG to perform fairly well on images without applying binarization as HOG should be able to deal with noise.
 With no binarization the classifier reached a score of 0.76 which tells us that while HOG pulls most of the weight the additional step of binarization is still worthwhile, yielding an ~8\% reductiong of missclassifications.
+The following table shows the performance of our SVC using different parameters: 
+\begin{tabular}{l | l | l}
+    Kernel & preprocessing & precision\\ \hline
+    Linear & binarization \& HOG & 0.78 \\ \hline
+    Linear & binarization & 0.11 \\ \hline
+    Linear & HOG & 0.76\\ \hline
+\end{tabular}
 
 \subsection{K Nearest neighbors}
 In order to test out our theory that an SVC would suffer from different versions of letters we settled on k nearest neighbors as a second classifier.
 We hypothesized that this method would perform better based on our suspected weakness of the SVC since nearest neighbours does not rely on partitioning the feature space.
-Our best performing configuration managed a precision of 0.80 using 10 neighbours linearly weighted by distance, yielding a fairly decent improvement.
+Our best performing configuration managed a precision of 0.81 using 10 neighbours linearly weighted by manhattan distance, yielding a fairly decent improvement.
 Not only did K nearest outperform SVC, it also did so without having to use the binarization preprocessing step.
-We're not sure why binarization is nescessary using SVC compared to K nearest % postuler no greier her... %
+We're not sure why binarization is nescessary using SVC compared to K nearest % postuler no greier her..? %
+The following table shows the performance of our K nearest classifier using different parameters: 
+\begin{tabular}{l | l | l | l | l}
+    K (neighbors) & weight & distance measure & preprossesing & precision\\ \hline
+    10 & linear distance & euclidean & HOG & 0.80\\ \hline
+    10 & uniform & HOG & euclidean & 0.79\\ \hline
+    5 & uniform & HOG & euclidean & 0.79\\ \hline
+    10 & linear & HOG & manhattan & 0.81\\ \hline
+    10 & linear & HOG \& binarization & manhattan & 0.81\\ \hline
+\end{tabular}
+    
 
 \end{document}
