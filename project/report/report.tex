@@ -70,9 +70,15 @@ To run: \texttt{python3 main.py}.
 
 \section{Preprocessing}
 
-We preprocess images first by binarizing them, 
+We tested several preprocessing techniques and combinations thereof, such as principle component analysis, morphological closing, binarisation and histogram of gradients analysis.
+A combination of binarisation and histogram of gradients analysis yielded the best results in combination with the classifier we chose.
 
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{img/preprocessing.pdf}
+    \caption{Preprocessing steps} \label{fig:preprocessing}
+\end{figure}
 
 \section{Classifiers}
 \subsection{SVC}

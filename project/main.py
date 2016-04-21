@@ -31,7 +31,7 @@ def load_dataset(n=25):
 
     return Bunch(data=image_data,
                  target=target.astype(np.int),
-                 target_names=np.arange(ALPHABET_SIZE),
+                 target_names=np.arange(n),
                  images=images,
                  DESCR='')
 

@@ -12,7 +12,7 @@ DATA_SHAPE = (-1, 20, 20)
 
 def read_img_to_array(path):
     with Image.open(path) as img:
-        assert img.mode == 'L'  # only dealing with BW images
+        assert img.mode == 'L'  # only dealing with Monochrome images
 
         return tuple(img.getdata())
 
