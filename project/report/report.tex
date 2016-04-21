@@ -4,6 +4,8 @@
 
 \documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
 
+\usepackage[top=1in, bottom=1.25in, left=1.25in, right=1.25in]{geometry}
+
 \usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
 \usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
 \usepackage[english]{babel} % English language/hyphenation
@@ -181,6 +183,12 @@ SVC using different parameters:
     \caption{Performance for different configurations using SVC}
 \end{table}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\linewidth]{img/test}
+    \caption{Some correct and incorrect classifications from \texttt{experiment\_performance\_binarize\_hog\_svc.py}.}
+\end{figure}
+
 \subsection{K Nearest neighbors}
 In order to test out our theory that an SVC would suffer from
 different versions of letters we settled on \textit{K nearest neighbors} as a
@@ -212,6 +220,7 @@ performance of our K nearest classifier using different parameters:
 \input{detection}
 
 \subsection{Evaluation}
+The project and report quality suffered a lot from lack of time, as all the group members had to work on other things for most of the project period, and the work was crammed in at the end.
 Considering our lack of experience with text recognition we are fairly happy with how well the classifier performs.
 If we had more time we would like to try more advanced techniques such as convolutional neural nets to see if they could do any better.
 Another interesting idea is combinining both the SVC and the K nearest neighbors classifiers as an ensemble to study how the performance would improve, 

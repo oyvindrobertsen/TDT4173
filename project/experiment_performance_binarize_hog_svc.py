@@ -15,5 +15,5 @@ if __name__ == '__main__':
         dataset,
         classifier=classifier,
         preprocessing_func=combined,
-        visualize_n=20
+        visualize_n=5
     )

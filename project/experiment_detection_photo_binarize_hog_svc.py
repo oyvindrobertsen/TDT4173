@@ -5,8 +5,8 @@ from sklearn.svm.classes import LinearSVC
 
 from dataset import load_dataset, IMG_DIR
 from detection import sliding_windows
-from train import train_and_test_classifier
 from preprocessing import oriented_gradients, binarize
+from train import train_and_test_classifier
 from utils import int_to_letter
 
 path = os.path.join(IMG_DIR, "illuminati.jpg")

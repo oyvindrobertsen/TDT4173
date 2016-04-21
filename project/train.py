@@ -23,7 +23,12 @@ def visualize(rows):
 
 
 def train_and_test_classifier(dataset, classifier, preprocessing_func=None, visualize_n=0):
+    """
+    Splits the dataset and preprocesses, trains, then tests the classifier.
+      Returns the classifier for re-use after testing it.
+    """
     np.set_printoptions(threshold=np.nan, linewidth=np.nan)
+
     training, test = split_dataset(dataset)
 
     if preprocessing_func:

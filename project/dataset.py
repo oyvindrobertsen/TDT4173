@@ -15,11 +15,18 @@ CSV_DIR = os.path.join(PROJECT_DIR, 'csv')
 
 
 def read_img_to_array(path):
+    """
+    Gets image as uint8 data
+    """
     with Image.open(path).convert('L') as img:
         return tuple(img.getdata())
 
 
 def read_dataset_from_images(n=25):
+    """
+    Creates and intermediate representation of the dataset,
+     with each image matrix sorted into categories based on the letter it represents
+    """
     dataset = {}
     for path, dirs, files in os.walk(DATA_DIR):
         letter = os.path.split(path)[-1]
@@ -39,6 +46,11 @@ def read_dataset_from_images(n=25):
 
 
 def dataset_to_csv(dataset_from_images, write_path='dataset.csv'):
+    """
+    Takes the intermediate dataset and writes it as a matrix to a csv file.
+      When reusing the dataset we only need to read one file directly into a matrix,
+      not hundreds of image files.
+    """
     with open(write_path, 'w') as outfile:
         writer = csv.writer(outfile)
 
@@ -49,6 +61,9 @@ def dataset_to_csv(dataset_from_images, write_path='dataset.csv'):
 
 
 def get_dataset(n=25):
+    """
+    Gets dataset from csv if it exists, if not creates it
+    """
     path = os.path.join(CSV_DIR, 'dataset_{}.csv'.format(n))
     try:
         return np.loadtxt(path, delimiter=',')
@@ -60,6 +75,9 @@ def get_dataset(n=25):
 
 
 def load_dataset(n=25):
+    """
+    Load the dataset from a single big matrix into the Bunch format used by scikit-learn
+    """
     # each row of the matrix is x pixel intensity values and 1 value representing the class of the image
     dataset_matrix = get_dataset(n)
     target = dataset_matrix[:, -1]  # gets the last column, classes
@@ -77,6 +95,9 @@ def load_dataset(n=25):
 
 
 def split_dataset(dataset, split=0.8):
+    """
+    Splits the dataset (in Bunch format) into two parts
+    """
     training_data = []
     test_data = []
 
