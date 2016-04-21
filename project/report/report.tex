@@ -74,13 +74,15 @@ implemented in Python 3, using the following libraries:
 \section{Preprocessing}
 
 We tested several preprocessing techniques and combinations thereof,
-such as principle component analysis, morphological closing,
-binarisation and histogram of gradients analysis.  A combination of
-binarization and histogram of gradients analysis yielded the best
-results in combination with the classifier we chose.
+such as morphological closing, binarisation and histogram of gradients
+analysis.  A combination of binarization and histogram of gradients
+analysis yielded the best results in combination with the classifier
+we chose.
 
-All attempts at including morphology-based techniques to reduce noise, degraded performance.
-While for instance erosion might reduce unwanted noise in images, it is not very discriminatory about what it removes, resulting in key features being removed from images.
+All attempts at including morphology-based techniques to reduce noise,
+degraded performance.  While for instance erosion might reduce
+unwanted noise in images, it is not very discriminatory about what it
+removes, resulting in key features being removed from images.
 
 Histogram of gradients analysis partitions the image into cells and
 outputs a vector of gradients, one for each cell.  Inspired by He et
@@ -102,8 +104,7 @@ Figure~\ref{fig:preprocessing} illustrates our preprocessing pipeline.
 Our approach to classifiers was driven by our lack of experience with
 using machine learning frameworks.  When starting out we used a
 tutorial for recognizing hand written digits provided by scikit which
-happened to use a support vector classifier. %link til tutorial?
-http://scikit-learn.org/stable/auto_examples/classification/plot_digits_classification.html#example-classification-plot-digits-classification-py
+happened to use a support vector classifier.
 In our first attempt we simply extended the example from sklearn to
 create a dataset from 74k-lite to see what kind of performance we
 would get.  After getting very lackluster results we first thought
@@ -136,8 +137,8 @@ the same class which would explain why it performed so well, or
 perhaps the SVC found a way to create partitions containing both the
 small and the big version for each letter.  The best result we
 obtained with a linear classifier was a precision of 0.78 which was
-achieved when first binarizing the images and then applying HOG % with
-[5, 4, 2] We expected HOG to perform fairly well on images without
+achieved when first binarizing the images and then applying HOG % with[5, 4, 2]
+We expected HOG to perform fairly well on images without
 applying binarization as HOG should be able to deal with noise.  With
 no binarization the classifier reached a score of 0.76 which tells us
 that while HOG pulls most of the weight the additional step of
